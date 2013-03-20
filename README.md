@@ -1,6 +1,8 @@
 OnePageCRM
 ==========
 
+THIS IS A PRE-RELEASE GEM UNDER ACTIVE DEVELOPMENT. NO GEM IS AVAILABLE YET.
+
 Description
 -----------
 A Ruby wrapper for the OnePageCRM API
