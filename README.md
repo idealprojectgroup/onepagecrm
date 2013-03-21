@@ -1,6 +1,9 @@
 OnePageCRM
 ==========
 
+[![Code Climate](https://codeclimate.com/github/idealprojectgroup/onepagecrm.png)](https://codeclimate.com/github/idealprojectgroup/onepagecrm)
+[![Build Status](https://travis-ci.org/idealprojectgroup/onepagecrm.png)](https://travis-ci.org/idealprojectgroup/onepagecrm)
+
 Description
 -----------
 A Ruby wrapper for the OnePageCRM API
