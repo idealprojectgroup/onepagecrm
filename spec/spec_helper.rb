@@ -8,6 +8,7 @@ SimpleCov.start
 require 'onepagecrm'
 require 'rspec'
 require 'webmock/rspec'
+require 'timecop'
 
 WebMock.disable_net_connect!
 

@@ -11,13 +11,12 @@ module OnePageCRM
     URL = "https://www.onepagecrm.com" unless defined? OnePageCRM::Default::URL
     CONNECTION_OPTIONS = {
       :headers => {
-        :accept       => 'application/json',
-        :user_agent   => "OnePageCRM Ruby Gem #{OnePageCRM::Version}"
+        :accept         => 'application/json',
+        :"content-type" => 'application/json; charset=utf-8',
+        :user_agent     => "OnePageCRM Ruby Gem #{OnePageCRM::Version}"
       }
     } unless defined? OnePageCRM::Default::CONNECTION_OPTIONS
     MIDDLEWARE = Faraday::Builder.new do |builder|
-      # Convert request params to "www-form-urlencoded"
-      builder.use Faraday::Request::UrlEncoded
       # Parse JSON response bodies using MultiJson
       builder.use OnePageCRM::Response::ParseJson
       # Set Faraday's HTTP adapter

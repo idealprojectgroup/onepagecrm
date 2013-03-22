@@ -6,6 +6,8 @@ describe OnePageCRM::API::Authorization do
     OnePageCRM.configure do |config|
       config.login = "test@example.com"
       config.password = "test123"
+      config.uid = "4e5de962638190102c000337"
+      config.api_key = "3zc32iOuuXANr9jg/8cB8R89lK9bJWwzTzgr6FNoP88="
     end
     @client = OnePageCRM.client
   end

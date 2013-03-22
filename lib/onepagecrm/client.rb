@@ -3,6 +3,8 @@
 
 require 'faraday'
 require 'multi_json'
+require 'digest/sha1'
+require 'openssl'
 require 'onepagecrm/api/authorization'
 require 'onepagecrm/api/contacts'
 require 'onepagecrm/configurable'
@@ -38,9 +40,12 @@ module OnePageCRM
 
   private
 
-    def request(method, path, params={}, signature_params=params)
+    def request(method, path, params={})
       connection.send(method.to_sym, path, params) do |request|
-
+        request.body = MultiJson.dump(request.body)
+        request.headers[:"x-onepagecrm-uid"]  = uid_header
+        request.headers[:"x-onepagecrm-ts"]   = ts_header
+        request.headers[:"x-onepagecrm-auth"] = auth_header(method, path, request.body)
       end.env
     rescue Faraday::Error::ClientError
       raise OnePageCRM::Error
@@ -52,5 +57,38 @@ module OnePageCRM
       @connection ||= Faraday.new(@url, @connection_options.merge(:builder => @middleware))
     end
 
+    def uid_header
+      @uid
+    end
+
+    def ts_header
+      utc_timestamp.to_s
+    end
+
+    # See: http://www.onepagecrm.com/api/api-doc-for-dev-signature-value.html
+    def auth_header method, path, body 
+      hmac_sha256(auth_params(method, path, body).join('.'), @api_key)
+    end
+
+    def auth_params method, path, body
+      params = [@uid, utc_timestamp, method.to_s.upcase, sha1(path)]
+      if [:put, :post].include?(method)
+        params << sha1(body)
+      else
+        params
+      end
+    end
+
+    def utc_timestamp
+      Time.now.utc.to_i
+    end
+
+    def sha1 string
+      Digest::SHA1.hexdigest(string)
+    end
+
+    def hmac_sha256 string, key
+      OpenSSL::HMAC.hexdigest("sha256", key, string)
+    end
   end
 end
